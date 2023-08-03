@@ -32,6 +32,7 @@ CSRF_TRUSTED_ORIGINS.extend(
 
 # Application definition
 INSTALLED_APPS = [
+    'core',
     'daphne',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -42,7 +43,6 @@ INSTALLED_APPS = [
     # 'django_browser_reload',
     'tailwind',
     'theme',
-    'core',
     'api',
     'dashboard'
 ]

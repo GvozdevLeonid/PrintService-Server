@@ -1,4 +1,3 @@
-from core import models
 import time
 import json
 from celery import shared_task
@@ -10,6 +9,7 @@ import email
 import io
 
 def calculate_print_cost(print_settings: str, kiosk_id: int) -> float:
+    from core import models
     kiosk_object = models.Kiosk.objects.get(id=kiosk_id)
     print_settings = json.loads(print_settings)
 
@@ -19,6 +19,7 @@ def calculate_print_cost(print_settings: str, kiosk_id: int) -> float:
             return print_settings['total_pages'] * price_object.price
 
 def get_next_guest_identificator() -> str:
+    from core import models
     def increment_letters(letters):
         reversed_letters = letters[::-1]
         for i, letter in enumerate(reversed_letters):
@@ -48,6 +49,7 @@ def get_next_guest_identificator() -> str:
 
 @shared_task
 def check_print_queue(channel_name: str, last_id: int) -> None:
+    from core import models
     if last_id is not None:
         while True:
             if models.Print.objects.all().last().id > last_id:
@@ -67,6 +69,7 @@ def check_print_queue(channel_name: str, last_id: int) -> None:
 
 @shared_task
 def check_transactions(channel_name: str, last_id: int) -> None:
+    from core import models
     if last_id is not None:
         while True:
             if models.Transaction.objects.all().last().id > last_id:
@@ -101,7 +104,8 @@ def parse_configured_printers(configured_printers: dict) -> list[str]:
     return price_list
 
 
-def create_price_list(price_list: list[str], kiosk: models.Kiosk) -> None:
+def create_price_list(price_list: list[str], kiosk) -> None:
+    from core import models
     models.Price.objects.filter(kiosk=kiosk).delete()
     for price in price_list:
         models.Price.objects.create(
@@ -113,6 +117,7 @@ def create_price_list(price_list: list[str], kiosk: models.Kiosk) -> None:
 
 
 def create_print(phone_number, print_settings, kiosk_key) -> dict:
+    from core import models
     user_object = models.User.objects.get(phone_number=phone_number)
     kiosk_object = models.Kiosk.objects.get(key=kiosk_key)
 

@@ -1,7 +1,10 @@
 import json
 from app.celery import app
 from channels.generic.websocket import WebsocketConsumer
-from api import functions
+from api.functions import (
+    check_print_queue,
+    check_transactions
+)
 
 class ApiConsumer(WebsocketConsumer):
     tasks = {}
@@ -24,11 +27,9 @@ class ApiConsumer(WebsocketConsumer):
         data = json.loads(text_data)
 
         if data['action'] == 'check_print_queue':
-            task = functions.check_print_queue.delay(self.channel_name, data['last_id'])
+            task = check_print_queue.delay(self.channel_name, data['last_id'])
             self.tasks[self.channel_name] = task
         elif data['action'] == 'check_transactions':
-            task = functions.check_transactions.delay(self.channel_name, data['last_id'])
+            task = check_transactions.delay(self.channel_name, data['last_id'])
             self.tasks[self.channel_name] = task
-        # elif data['action'] == 'allow_cancel_print':
-        #     task = functions.allow_cancel_print.delay(self.channel_name, data)
 
