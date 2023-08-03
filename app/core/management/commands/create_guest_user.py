@@ -9,3 +9,6 @@ class Command(BaseCommand):
             guest_user = models.User.objects.create_user(phone_number=settings.GUEST['phone_number'], name='Guest', email='')
             guest_user.set_password(settings.GUEST['password'])
             guest_user.save()
+            self.stdout.write(self.style.SUCCESS('User created.'))
+        else:
+            self.stdout.write(self.style.SUCCESS('User exist.'))
