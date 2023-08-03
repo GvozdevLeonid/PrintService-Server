@@ -32,7 +32,6 @@ services:
       - DB_NAME=${DB_NAME}
       - DB_USER=${DB_USER}
       - DB_PASSWORD=${DB_PASSWORD}
-      - OPENAI_API_KEY=${OPENAI_API_KEY}
     depends_on:
       - redis
 
@@ -41,7 +40,7 @@ services:
       context: ./proxy
     restart: always
     ports:
-       - '80003:80'
+       - '8003:80'
       # - '80:80'
       # - '443:443'
     volumes:

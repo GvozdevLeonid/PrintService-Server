@@ -35,7 +35,6 @@ services:
       sh -c "python manage.py tailwind install && python manage.py tailwind start"
 
 
-
   celery:
     build:
       context: .
