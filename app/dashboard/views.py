@@ -618,7 +618,10 @@ def statistics_page(request):
         else:
             date_1 = print_objects.first()
             date_2 = transaction_objects.first()
-            date_from = date_1.date if date_1.date < date_2.date else date_2
+            if date_1 is not None and date_2 is not None:
+                date_from = date_1.date if date_1.date < date_2.date else date_2
+            else:
+                date_from = (datetime.now() - timedelta(days=30))
 
         if date_to != '':
             date_to = datetime.strptime(date_to + ' 23:59:59', '%Y-%m-%d %H:%M:%S')
@@ -627,8 +630,11 @@ def statistics_page(request):
         else:
             date_1 = print_objects.last()
             date_2 = transaction_objects.last()
-            date_to = date_1.date if date_1.date < date_2.date else date_2
-
+            if date_1 is not None and date_2 is not None:
+                date_to = date_1.date if date_1.date < date_2.date else date_2
+            else:
+                date_to = datetime.now()
+           
         dates = [date_from.date() + timedelta(days=x) for x in range((date_to.date() - date_from.date()).days + 1)]
 
         guests_print_objects = print_objects.filter(user__phone_number=settings.GUEST['phone_number'])
