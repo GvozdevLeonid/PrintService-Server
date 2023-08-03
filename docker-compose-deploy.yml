@@ -23,7 +23,7 @@ services:
     build:
       context: .
     restart: always
-    command: celery -A app worker -B  -l info
+    command: celery -A app worker -B -l info
     volumes:
       - ./app:/app
       - static-data:/vol/web
