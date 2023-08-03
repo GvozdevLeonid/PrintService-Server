@@ -9,4 +9,4 @@ python manage.py tailwind build --no-input
 echo yes | python manage.py collectstatic
 python manage.py migrate
 
-daphne --bind "0.0.0.0:${APP_PORT}" --workers=4 app.asgi
+daphne --bind "0.0.0.0:${APP_PORT}" app.asgi
