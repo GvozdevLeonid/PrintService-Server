@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% load widget_tweaks %}
+{% load i18n %}
+
+{% block  content %}
+<div class="min-h-screen flex flex-col justify-center items-center px-6 my-12">
+    <form class="my-auto w-full sm:max-w-sm flex flex-col" method="post" action="{% url 'login' %}">
+        {% csrf_token %}
+        <h2 class="text-center text-2xl font-bold text-gray-900">Sign In to PrintService</h2>
+        <label class="mt-5 block text-base font-normal text-gray-900" for="{{form.username.id_for_label}}">{% translate "Phone number" %}:</label>
+        {{form.username|add_class:"mt-2.5 block form-input"}}
+        <div class="mt-1 text-sm font-light leading-4 text-gray-900">{{form.username.help_text}}</div>
+        <div class="mt-1 text-sm text-red-500 font-light leading-4">{{form.username.errors}}</div>
+        <div class="flex justify-between mt-2.5">
+            <label class="block text-base font-normal text-gray-900" for="{{form.password.id_for_label}}">{{form.password.label_tag}}</label>
+            <a class="block text-base font-normal text-indigo-600 hover:text-indigo-500" href="{% url 'set-password' %}">{% translate "Forgot password?" %}</a>
+        </div>
+        {{form.password|add_class:"mt-2.5 form-input"}}
+        <div class="mt-1 text-sm font-light leading-4 text-gray-900">{{form.password.help_text}}</div>
+        <div class="mt-1 text-sm text-red-500 font-light leading-4">{{form.password.errors}}</div>
+        
+        {% for error in form.non_field_errors %}
+            <div class="mt-5 text-sm text-red-500 font-light leading-4">{{error}}</div>
+        {% endfor %}
+
+        <button class=" mt-5 form-button" type="submit">{% translate "Sign in" %}</button>
+
+        <a class="mt-5 block text-center text-base font-normal text-indigo-600 hover:text-indigo-500" href="{% url 'registration' %}">{% translate "Sign up" %}</a>
+    </form>
+</div>
+{% endblock %}

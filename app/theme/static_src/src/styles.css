@@ -1,0 +1,46 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+.form-button {
+    @apply  p-2.5 flex w-full justify-center rounded-md text-base font-normal text-white bg-indigo-600 shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600
+}
+
+.form-input {
+    @apply px-2.5 block w-full rounded-md text-base font-normal text-gray-900 shadow-sm border border-gray-300 placeholder:text-gray-400 focus:border-indigo-600
+}
+
+.dashboard-item {
+    @apply flex gap-2.5 items-center text-lg font-semibold p-2.5 mt-5 rounded-md text-gray-900 first:mt-7 aria-selected:bg-indigo-400 aria-selected:bg-opacity-10 aria-selected:text-indigo-600 hover:text-indigo-600
+}
+
+.table-row {
+    @apply flex justify-between py-2.5 border-b bg-opacity-10 border-gray-300 items-center font-normal text-gray-900 text-base first:text-lg first:border-b-2 last:border-none hover:bg-indigo-300 hover:bg-opacity-10 first:hover:bg-transparent first:cursor-default
+}
+
+.my-button {
+    @apply text-indigo-400 text-sm font-semibold border rounded-md px-3 py-2 border-indigo-400 bg-indigo-400 bg-opacity-10 cursor-pointer
+}
+
+.table-height {
+    max-height: calc(100vh - 158px);
+    /* max-height: calc(100vh - 116px);  */
+    min-height: 390px;
+}
+.table-height-with-panel {
+    max-height: calc(100vh - 216px);
+    /* max-height: calc(100vh - 174px); */
+    min-height: 330px;
+}
+@media (min-width: 640px) {
+    .table-height {
+        max-height: calc(100vh - 190px);
+        /* max-height: calc(100vh - 148px); */
+
+    }
+    .table-height-with-panel {
+        max-height: calc(100vh - 248px); 
+        /* max-height: calc(100vh - 206px); */
+    }
+}

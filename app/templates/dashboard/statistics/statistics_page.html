@@ -1,0 +1,81 @@
+{% load i18n %}
+<div class="flex flex-col">
+    <div class="flex justify-between">
+        <div class="flex-1 flex flex-col gap-2.5">
+            <div class="flex-1 flex gap-2.5 items-center justify-between">
+                <div class="flex flex-col">
+                    <div class="text-lg font-semibold text-gray-900">{% translate "Printouts" %}</div>
+                    <div class="flex justify-between">
+                        <div class="pl-2 text-base font-normal text-gray-900">{% translate "Total" %}</div>
+                        <div class="pl-2 text-base font-normal text-gray-900">{{printouts.total}}</div>
+                    </div>
+                    <div class="flex justify-between">
+                        <div class="pl-2 text-base font-normal text-gray-900">{% translate "Users" %}</div>
+                        <div class="pl-2 text-base font-normal text-gray-900">{{printouts.registered_users}}</div>
+                    </div>
+                    <div class="flex justify-between">
+                        <div class="pl-2 text-base font-normal text-gray-900">{% translate "Guests" %}</div>
+                        <div class="pl-2 text-base font-normal text-gray-900">{{printouts.guests}}</div>
+                    </div>
+                </div>
+                <input type="hidden" id="printouts_labels" value="{% translate 'Users' %}~~~{% translate 'Guests' %}">
+                <input type="hidden" id="printouts_values" value="{{printouts.registered_users}}~~~{{printouts.guests}}">
+                <div class="relative w-2/4">
+                    <canvas id="printouts"></canvas>
+                </div>
+            </div>
+            <div class="flex-1 flex gap-2.5 items-center justify-between">
+                <div class="flex flex-col">
+                    <div class="text-lg font-semibold text-gray-900">{% translate "Income" %}</div>
+                    <div class="flex justify-between">
+                        <div class="pl-2 text-base font-normal text-gray-900">{% translate "Total" %}</div>
+                        <div class="pl-2 text-base font-normal text-gray-900">{{incomes.total}}</div>
+                    </div>
+                    <div class="flex justify-between">
+                        <div class="pl-2 text-base font-normal text-gray-900">{% translate "Users" %}</div>
+                        <div class="pl-2 text-base font-normal text-gray-900">{{incomes.registered_users}}</div>
+                    </div>
+                    <div class="flex justify-between">
+                        <div class="pl-2 text-base font-normal text-gray-900">{% translate "Guests" %}</div>
+                        <div class="pl-2 text-base font-normal text-gray-900">{{incomes.guests}}</div>
+                    </div>
+                    <div class="flex justify-between">
+                        <div class="pl-2 text-base font-normal text-gray-900">{% translate "Balances" %}</div>
+                        <div class="pl-2 text-base font-normal text-gray-900">{{incomes.balances}}</div>
+                    </div>
+                </div>
+                <input type="hidden" id="incomes_labels" value="{% translate 'Users' %}~~~{% translate 'Guests' %}~~~{% translate 'Balances' %}">
+                <input type="hidden" id="incomes_values" value="{{incomes.registered_users}}~~~{{incomes.guests}}~~~{{incomes.balances}}">
+                <div class="relative w-2/4">
+                    <canvas id="incomes"></canvas>
+                </div>
+            </div>
+        </div>
+        <div class="flex-1 flex-col hidden md:flex">
+            <div class="text-lg font-semibold text-gray-900 text-center">{% translate "Prints per day" %}</div>
+            <input type="hidden" id="print_per_days_labels" value="{{print_per_days.labels}}">
+            <input type="hidden" id="print_per_days_registered_users_data" value="{{print_per_days.registered_users_data}}">
+            <input type="hidden" id="print_per_days_guests_data" value="{{print_per_days.guests_data}}">
+            <div class="relative w-full">
+                <canvas id="print_per_days"></canvas>
+            </div>
+            <div class="text-lg font-semibold text-gray-900 text-center">{% translate "Income per day" %}</div>
+            <div class="relative w-full">
+                <input type="hidden" id="income_per_days_labels" value="{{income_per_days.labels}}">
+                <input type="hidden" id="income_per_days_registered_users_data" value="{{income_per_days.registered_users_data}}">
+                <input type="hidden" id="income_per_days_guests_data" value="{{income_per_days.guests_data}}">
+                <canvas id="income_per_days"></canvas>
+            </div>
+        </div>
+    </div>
+    <div class="hidden md:flex flex-col gap-2.5">
+        <div class="text-lg font-semibold text-gray-900 text-center">{% translate "Most popular print settings" %}</div>
+        <div class="flex-1 flex">
+            <input type="hidden" id="popular_printer_settings_labels" value="{{popular_print_settings.labels}}">
+            <input type="hidden" id="popular_printer_settings_data" value="{{popular_print_settings.data}}">
+            <div class="relative w-full">
+                <canvas id="popular_printer_settings"></canvas>
+            </div>
+        </div>
+    </div>
+</div>

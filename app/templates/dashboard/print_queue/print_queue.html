@@ -1,0 +1,13 @@
+{% extends 'dashboard/base.html' %}
+
+
+{% block main %}
+<div id="print-queue-container" class="flex-1 w-full"></div>
+<script>
+    document.getElementById('search-input').addEventListener("input", function(event) {
+        load_print_queue_table();
+    });
+    check_print_queue();
+    load_print_queue_table(1);
+</script>
+{% endblock %}s

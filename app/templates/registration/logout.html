@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% load widget_tweaks %}
+{% load i18n %}
+
+{% block  content %}
+<div class="min-h-screen flex flex-col items-center px-6 my-12">
+    <div class="mt-20 w-full sm:max-w-sm flex flex-col">
+        <h2 class="text-center text-2xl font-bold text-gray-900">{% translate "Logget out" %}</h2>
+        <div class="mt-5 text-base font-normal text-gray-900 text-center ">{% translate "Thanks for spending some quality time with the web site today." %}</div>
+        <a href="{% url 'login' %}" class="mt-5 block text-center text-base font-normal text-indigo-600 hover:text-indigo-500">{% translate "Login again" %}</a>
+    </div>
+</div>
+{% endblock %}

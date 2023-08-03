@@ -1,0 +1,21 @@
+{% extends 'dashboard/base.html' %}
+{% load i18n %}
+
+{% block main_panel %}
+<div class="w-full flex mb-5">
+<div class="my-button" onclick="kiosks_action(null, 'view')">{% translate "Add kiosk" %}</div>
+</div>
+{% endblock %}
+
+{% block main %}
+<div id="kiosks-container" class="flex-1 flex flex-col w-full overflow-scroll table-height-with-panel"></div>
+<script>
+    document.getElementById('search-input').addEventListener("input", function(event) {
+        load_kiosks_table();
+    });
+    setTimeout(function() {
+        load_kiosks_table(),
+        1000
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,12 @@
+{% extends 'dashboard/base.html' %}
+
+
+{% block main %}
+<div id="prices-container" class="flex-1 w-full"></div>
+<script>
+    document.getElementById('search-input').addEventListener("input", function(event) {
+        load_prices_table();
+    });
+    load_prices_table(1);
+</script>
+{% endblock %}

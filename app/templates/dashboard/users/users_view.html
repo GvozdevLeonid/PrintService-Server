@@ -1,0 +1,79 @@
+{% load widget_tweaks %}
+{% load i18n %}
+<div class="w-full flex flex-col items-center justify-center my-auto" role="dialog" aria-modal="true">
+    <div class="absolute inset-0 bg-black bg-opacity-30"></div>
+    <div class="z-30 bg-white rounded-md w-full max-w-2xl border border-gray-300 relative flex flex-col p-5 gap-5">
+        <div class="absolute top-2.5 right-2.5 text-indigo-600 cursor-pointer" onclick="close_modal();">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+            </svg>              
+        </div>
+        <h2 class="text-center text-2xl font-bold text-gray-900 mx-5">{{title}}</h2>
+        <div class="border-b -mx-5"></div>
+        <form id="users-view-form" class="flex flex-col gap-2.5">
+            <div class="flex flex-col">
+                <div class="flex gap-2.5 justify-between items-center">
+                    <label class="text-base font-normal text-gray-900" for="{{form.phone_number.id_for_label}}">{{form.phone_number.label}}</label>
+                    {{form.phone_number|add_class:"max-w-md p-1 form-input"}}
+                </div>
+                <div class="mt-1 text-sm font-light leading-4 text-gray-900">{{form.phone_number.help_text}}</div>
+                <div class="mt-1 text-sm text-red-500 font-light leading-4">{{form.phone_number.errors}}</div>
+            </div>
+            <div class="flex flex-col">
+                <div class="flex gap-2.5 justify-between items-center">
+                    <label class="text-base font-normal text-gray-900" for="{{form.email.id_for_label}}">{{form.email.label}}</label>
+                    {{form.email|add_class:"max-w-md p-1 form-input"}}
+                </div>
+                <div class="mt-1 text-sm font-light leading-4 text-gray-900">{{form.email.help_text}}</div>
+                <div class="mt-1 text-sm text-red-500 font-light leading-4">{{form.email.errors}}</div>
+            </div>
+            <div class="flex flex-col">
+                <div class="flex gap-2.5 justify-between items-center">
+                    <label class="text-base font-normal text-gray-900" for="{{form.name.id_for_label}}">{{form.name.label}}</label>
+                    {{form.name|add_class:"max-w-md p-1 form-input"}}
+                </div>
+                <div class="mt-1 text-sm font-light leading-4 text-gray-900">{{form.name.help_text}}</div>
+                <div class="mt-1 text-sm text-red-500 font-light leading-4">{{form.name.errors}}</div>
+            </div>
+            {% if id == 'null' %}
+            <div class="flex flex-col">
+                <div class="flex gap-2.5 justify-between items-center">
+                    <label class="text-base font-normal text-gray-900" for="{{form.new_password.id_for_label}}">{{form.new_password.label}}</label>
+                    {{form.new_password|add_class:"max-w-md p-1 form-input"}}
+                </div>
+                <div class="mt-1 text-sm font-light leading-4 text-gray-900">{{form.new_password.help_text}}</div>
+                <div class="mt-1 text-sm text-red-500 font-light leading-4">{{form.new_password.errors}}</div>
+            </div>
+            {% endif %}
+            {% if allow_stuff %}
+            <div class="flex flex-col">
+                <div class="flex gap-2.5 items-center">
+                    <label class="text-base font-normal text-gray-900" for="{{form.is_staff.id_for_label}}">{{form.is_staff.label}}</label>
+                    {{form.is_staff|add_class:"max-w-[20px] h-5 p-1 form-input"}}
+                </div>
+                <div class="mt-1 text-sm font-light leading-4 text-gray-900">{{form.is_staff.help_text}}</div>
+                <div class="mt-1 text-sm text-red-500 font-light leading-4">{{form.is_staff.errors}}</div>
+            </div>
+            {% endif %}
+            <div class="flex flex-col">
+                <div class="flex gap-2.5 items-center">
+                    <label class="text-base font-normal text-gray-900" for="{{form.allow_credit.id_for_label}}">{{form.allow_credit.label}}</label>
+                    {{form.allow_credit|add_class:"max-w-[20px] h-5 p-1 form-input"}}
+                </div>
+                <div class="mt-1 text-sm font-light leading-4 text-gray-900">{{form.allow_credit.help_text}}</div>
+                <div class="mt-1 text-sm text-red-500 font-light leading-4">{{form.allow_credit.errors}}</div>
+            </div>
+            <div class="flex flex-col gap-2.5">
+                <label class="text-base font-normal text-gray-900" for="{{form.note.id_for_label}}">{{form.note.label}}</label>
+                {{form.note|add_class:"w-full p-1 form-input"}}
+                <div class="mt-1 text-sm font-light leading-4 text-gray-900">{{form.note.help_text}}</div>
+                <div class="mt-1 text-sm text-red-500 font-light leading-4">{{form.note.errors}}</div>
+            </div>
+        </form>
+        <div class="flex justify-end items-start gap-2.5">
+            <div class="flex gap-2.5 items-center font-sm font-semibold text-green-500 border rounded-md border-green-500 px-2 py-1 cursor-pointer hover:bg-green-500 hover:bg-opacity-10" onclick="users_action({{id}}, 'view_save')">
+                {% translate "Save" %}
+            </div>
+        </div>
+    </div>
+</div>

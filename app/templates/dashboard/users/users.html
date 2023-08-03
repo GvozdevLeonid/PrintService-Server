@@ -1,0 +1,18 @@
+{% extends 'dashboard/base.html' %}
+{% load i18n %}
+
+{% block main_panel %}
+<div class="w-full flex mb-5">
+<div class="my-button" onclick="users_action(null, 'view')">{% translate "Create user" %}</div>
+</div>
+{% endblock %}
+
+{% block main %}
+<div id="users-container" class="flex-1 w-full"></div>
+<script>
+    document.getElementById('search-input').addEventListener("input", function(event) {
+        load_users_table();
+    });
+    load_users_table(1);
+</script>
+{% endblock %}

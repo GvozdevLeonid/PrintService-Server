@@ -1,0 +1,43 @@
+{% load i18n %}
+<div class="w-full flex flex-col items-center justify-center my-auto" role="dialog" aria-modal="true">
+    <div class="absolute inset-0 bg-black bg-opacity-30"></div>
+    <div class="z-30 bg-white rounded-md w-full max-w-2xl border border-gray-300 relative flex flex-col p-5 gap-5">
+        <div class="absolute top-2.5 right-2.5 text-indigo-600 cursor-pointer" onclick="close_modal();">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+            </svg>              
+        </div>
+        <h2 class="text-center text-2xl font-bold text-gray-900 mx-5">{% translate "Edit price" %}</h2>
+        <div class="border-b -mx-5"></div>
+        <div class="flex gap-2.5 justify-between items-center">
+            <label class="text-base font-normal text-gray-900" for="prices-view-kiosk">{% translate "Kiosk" %}</label>
+            <input class="p-1 form-input max-w-md" type="text" disabled id="prices-view-kiosk" value="{{kiosk}}">
+        </div>
+        <div class="flex gap-2.5 justify-between items-center">
+            <label class="text-base font-normal text-gray-900" for="prices-view-print-settings">{% translate "Print settings" %}</label>
+            <input class="p-1 form-input max-w-md" type="text" disabled id="prices-view-print-settings" value="{{print_settings}}">
+        </div>
+        <div class="flex gap-2.5 justify-between items-center">
+            <label class="text-base font-normal text-gray-900" for="prices-view-start-page">{% translate "Start page" %}</label>
+            <input class="p-1 form-input max-w-md" type="number" id="prices-view-start-page" value="{{start_page}}">
+        </div>
+        <div class="flex gap-2.5 justify-between items-center">
+            <label class="text-base font-normal text-gray-900" for="prices-view-end-page">{% translate "End page" %}</label>
+            <input class="p-1 form-input max-w-md" type="number" id="prices-view-end-page" value="{{end_page}}">
+        </div>
+        <div class="flex gap-2.5 justify-between items-center">
+            <label class="text-base font-normal text-gray-900" for="prices-view-price">{% translate "Price" %}</label>
+            <input class="p-1 form-input max-w-md" type="number" id="prices-view-price" value="{{price}}">
+        </div>
+        <div class="flex gap-2.5 justify-end">
+            {% if can_delete %}
+                <div class="flex gap-2.5 items-center font-sm font-semibold text-red-500 border rounded-md border-red-500 px-2 py-1 cursor-pointer hover:bg-red-500 hover:bg-opacity-10" onclick="prices_action({{id}}, 'view_delete')">
+                    {% translate "Delete" %}
+                </div>
+            {% endif %}
+            <div class="flex gap-2.5 items-center font-sm font-semibold text-green-500 border rounded-md border-green-500 px-2 py-1 cursor-pointer hover:bg-green-500 hover:bg-opacity-10" onclick="prices_action({{id}}, 'view_save')">
+                {% translate "Save" %}
+            </div>
+        </div>
+    </div>
+</div>

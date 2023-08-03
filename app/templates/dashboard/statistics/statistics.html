@@ -1,0 +1,40 @@
+{% extends 'dashboard/base.html' %}
+{% load i18n %}
+
+{% block panel %}
+<div class="w-full flex items-center gap-2.5">
+    <div class="hidden gap-2.5 items-center sm:flex fill-indigo-400">
+        <label class="text-base font-normal text-gray-900 min-w-fit" for="cashbox-date-from">{% translate "Date from" %}</label>
+        <input class="p-1 form-input" type="date" id="cashbox-date-from" value="{{date_from}}">
+    </div>
+    <div class="hidden gap-2.5 items-center sm:flex">
+        <label class="text-base font-normal text-gray-900 min-w-fit" for="cashbox-date-to">{% translate "Date to" %}</label>
+        <input class="p-1 form-input" type="date" id="cashbox-date-to">
+    </div>
+</div>
+{% endblock %}
+
+{% block main %}
+<div id="statistics-container" class="flex-1 w-full"></div>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    document.getElementById('search-input').parentElement.classList.add('hidden');
+    document.getElementById('cashbox-date-from').addEventListener("input", function(event) {
+        load_statistics_page();
+        setTimeout(function() {
+        load_statistics_chars();
+    }, 1000);
+    });
+    document.getElementById('cashbox-date-to').addEventListener("input", function(event) {
+        load_statistics_page();
+        setTimeout(function() {
+        load_statistics_chars();
+    }, 1000);
+    });
+    load_statistics_page();
+    setTimeout(function() {
+        load_statistics_chars();
+    }, 1000);
+   
+</script>
+{% endblock %}s

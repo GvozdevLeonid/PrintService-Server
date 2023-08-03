@@ -1,0 +1,86 @@
+version: "3.9"
+
+services:
+  app:
+    build:
+      context: .
+    restart: always
+    volumes:
+      - ./app:/app
+      - static-data:/vol/web
+    environment:
+      - DB_HOST=postgres
+      - DB_NAME=${DB_NAME}
+      - DB_USER=${DB_USER}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DJANGO_SECRET_KEY=${DJANGO_SECRET_KEY}
+      - DJANGO_ALLOWED_HOSTS=${DJANGO_ALLOWED_HOSTS}
+      - DJANGO_CSRF_TRUSTED_ORIGINS=${DJANGO_CSRF_TRUSTED_ORIGINS}
+    depends_on:
+      - postgres
+
+  celery:
+    build:
+      context: .
+    restart: always
+    command: celery -A app worker -B  -l info
+    volumes:
+      - ./app:/app
+      - static-data:/vol/web
+    environment:
+      - DB_HOST=postgres
+      - DB_NAME=${DB_NAME}
+      - DB_USER=${DB_USER}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+    depends_on:
+      - redis
+
+  proxy:
+    build:
+      context: ./proxy
+    restart: always
+    ports:
+       - '80003:80'
+      # - '80:80'
+      # - '443:443'
+    volumes:
+      - static-data:/vol/static
+      - ./certbot/www:/var/www/certbot/
+      - ./certbot/conf/:/etc/nginx/ssl/
+    environment:
+      - DOMAIN=${DOMAIN}
+    depends_on:
+      - app
+
+
+  postgres:
+    image: postgres:15.1-alpine
+    restart: always
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=${DB_NAME}
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+
+  redis:
+    image: redis:alpine
+    restart: always
+    volumes:
+      - redis-data:/data
+
+
+  certbot:
+    image: certbot/certbot:latest
+    volumes:
+      - ./certbot/www/:/var/www/certbot/
+      - ./certbot/conf/:/etc/letsencrypt/:rw
+    command: certonly --webroot -w /var/www/certbot --force-renewal --email ${EMAIL} -d ${DOMAIN} --agree-tos
+    depends_on:
+      - proxy
+
+volumes:
+  postgres-data:
+  static-data:
+  redis-data:

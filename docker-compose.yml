@@ -1,0 +1,72 @@
+version: "3.9"
+
+services:
+  app:
+    build:
+      context: .
+      args:
+        - DEV=true
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./app:/app
+      - dev-static-data:/vol/web
+    command: >
+      sh -c "python manage.py wait_for_db &&
+             python manage.py migrate &&
+             python manage.py runserver 0.0.0.0:8000"
+    environment:
+      - DB_HOST=postgres
+      - DB_NAME=devdb
+      - DB_USER=devuser
+      - DB_PASSWORD=changeme
+      - DEBUG=1
+    depends_on:
+      - postgres
+
+  tailwind:
+    build:
+      context: .
+    volumes:
+      - ./app:/app
+      - dev-static-data:/vol/web
+    tty: true
+    command: >
+      sh -c "python manage.py tailwind install && python manage.py tailwind start"
+
+
+
+  celery:
+    build:
+      context: .
+    command: celery -A app worker -B -l info
+    volumes:
+      - ./app:/app
+      - dev-static-data:/vol/web
+    environment:
+      - DB_HOST=postgres
+      - DB_NAME=devdb
+      - DB_USER=devuser
+      - DB_PASSWORD=changeme
+    depends_on:
+      - redis
+
+
+  postgres:
+    image: postgres:15.1-alpine
+    volumes:
+      - dev-postgres-data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=devdb
+      - POSTGRES_USER=devuser
+      - POSTGRES_PASSWORD=changeme
+
+  redis:
+    image: redis:alpine
+    volumes:
+      - dev-redis-data:/data
+
+volumes:
+  dev-postgres-data:
+  dev-redis-data:
+  dev-static-data:

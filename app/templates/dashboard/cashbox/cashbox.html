@@ -1,0 +1,34 @@
+{% extends 'dashboard/base.html' %}
+{% load i18n %}
+
+{% block main_panel %}
+<div class="w-full flex items-center mb-5 gap-2.5">
+    <div class="my-button" onclick="cashbox_action(null, 'view')">{% translate "Add transaction" %}</div>
+    <div class="hidden gap-2.5 items-center sm:flex fill-indigo-400">
+        <label class="text-base font-normal text-gray-900 min-w-fit" for="cashbox-date-from">{% translate "Date from" %}</label>
+        <input class="p-1 form-input" type="date" id="cashbox-date-from">
+    </div>
+    <div class="hidden gap-2.5 items-center sm:flex">
+        <label class="text-base font-normal text-gray-900 min-w-fit" for="cashbox-date-to">{% translate "Date to" %}</label>
+        <input class="p-1 form-input" type="date" id="cashbox-date-to">
+    </div>
+</div>
+{% endblock %}
+
+{% block main %}
+<div id="cashbox-container" class="flex-1 w-full"></div>
+<script>
+    document.getElementById('search-input').addEventListener("input", function(event) {
+        load_cashbox_table();
+    });
+    document.getElementById('cashbox-date-from').addEventListener("input", function(event) {
+        load_cashbox_table();
+    });
+    document.getElementById('cashbox-date-to').addEventListener("input", function(event) {
+        load_cashbox_table();
+    });
+    load_cashbox_table(1);
+
+    check_cashbox();
+</script>
+{% endblock %}

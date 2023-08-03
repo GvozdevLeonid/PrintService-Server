@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% load widget_tweaks %}
+{% load i18n %}
+
+{% block  content %}
+<div class="min-h-screen flex flex-col justify-center items-center px-6 my-12">
+    <form class="my-auto w-full sm:max-w-sm flex flex-col" method="post" action="{% url 'registration' %}">
+        {% csrf_token %}
+        <h2 class="text-center text-2xl font-bold text-gray-900">Sign Up to PrintService</h2>
+        <label class="mt-5 block text-base font-normal text-gray-900" for="{{form.email.id_for_label}}">{{form.email.label_tag}}</label>
+        {{form.email|add_class:"mt-2.5 block form-input"}}
+        <div class="mt-1 text-sm font-light leading-4 text-gray-900">{{form.email.help_text}}</div>
+        <div class="mt-1 text-sm text-red-500 font-light leading-4">{{form.email.errors}}</div>
+        
+        <label class="mt-2.5 block text-base font-normal text-gray-900" for="{{form.phone_number.id_for_label}}">{{form.phone_number.label_tag}}</label>
+        {{form.phone_number|add_class:"mt-2.5 block form-input"}}
+        <div class="mt-1 text-sm font-light leading-4 text-gray-900">{{form.phone_number.help_text}}</div>
+        <div class="mt-1 text-sm text-red-500 font-light leading-4">{{form.phone_number.errors}}</div>
+
+        <label class="mt-2.5 block text-base font-normal text-gray-900" for="{{form.name.id_for_label}}">{{form.name.label_tag}}</label>
+        {{form.name|add_class:"mt-2.5 block form-input"}}
+        <div class="mt-1 text-sm font-light leading-4 text-gray-900">{{form.name.help_text}}</div>
+        <div class="mt-1 text-sm text-red-500 font-light leading-4">{{form.name.errors}}</div>
+
+        <label class="mt-2.5 block text-base font-normal text-gray-900" for="{{form.new_password1.id_for_label}}">{{form.new_password1.label_tag}}</label>
+        {{form.new_password1|add_class:"mt-2.5 block form-input"}}
+        <div class="mt-1 text-sm font-light leading-4 text-gray-900">{{form.new_password1.help_text}}</div>
+        <div class="mt-1 text-sm text-red-500 font-light leading-4">{{form.new_password1.errors}}</div>
+
+        <label class="mt-2.5 block text-base font-normal text-gray-900" for="{{form.new_password2.id_for_label}}">{{form.new_password2.label_tag}}</label>
+        {{form.new_password2|add_class:"mt-2.5 block form-input"}}
+        <div class="mt-1 text-sm font-light leading-4 text-gray-900">{{form.new_password2.help_text}}</div>
+        <div class="mt-1 text-sm text-red-500 font-light leading-4">{{form.new_password2.errors}}</div>
+        
+        
+        {% for error in form.non_field_errors %}
+            <div class="mt-5 text-sm text-red-500 font-light leading-4">{{error}}</div>
+        {% endfor %}
+
+        <button class=" mt-5 form-button" type="submit">{% translate "Sign up" %}</button>
+
+        <a class="mt-5 block text-center text-base font-normal text-indigo-600 hover:text-indigo-500" href="{% url 'login' %}">{% translate "Sign in" %}</a>
+    </form>
+</div>
+{% endblock %}
