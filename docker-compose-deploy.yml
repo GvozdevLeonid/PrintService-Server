@@ -40,7 +40,7 @@ services:
       context: ./proxy
     restart: always
     ports:
-       - '8003:80'
+       - '8003:8003'
       # - '80:80'
       # - '443:443'
     volumes:
