@@ -619,7 +619,7 @@ def statistics_page(request):
             date_1 = print_objects.first()
             date_2 = transaction_objects.first()
             if date_1 is not None and date_2 is not None:
-                date_from = date_1.date if date_1.date < date_2.date else date_2
+                date_from = date_1 if date_1 < date_2 else date_2
             else:
                 date_from = (datetime.now() - timedelta(days=30))
 
@@ -631,7 +631,7 @@ def statistics_page(request):
             date_1 = print_objects.last()
             date_2 = transaction_objects.last()
             if date_1 is not None and date_2 is not None:
-                date_to = date_1.date if date_1.date < date_2.date else date_2
+                date_to = date_1 if date_1 < date_2 else date_2
             else:
                 date_to = datetime.now()
            

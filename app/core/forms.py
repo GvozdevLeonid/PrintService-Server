@@ -103,8 +103,9 @@ class RegistrationForm(forms.Form):
 
     def clean_email(self):
         email = self.cleaned_data.get('email')
-        if get_user_model().objects.filter(email=email).exists():
-            raise ValidationError(_('Email is busy'))
+        if email != '':
+            if get_user_model().objects.filter(email=email).exists():
+                raise ValidationError(_('Email is busy'))
             
         return email
 
