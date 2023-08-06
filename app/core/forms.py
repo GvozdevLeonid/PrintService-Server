@@ -131,6 +131,8 @@ class RegistrationForm(forms.Form):
         email = self.cleaned_data["email"]
         name = self.cleaned_data["name"]
         password = self.cleaned_data["new_password1"]
+        if email == '':
+            email = None
         
         user = get_user_model().objects.create(phone_number=phone_number, email=email, name=name)
         user.set_password(password)
@@ -198,10 +200,11 @@ class DashboardUserForm(forms.Form):
 
     def clean_email(self):
         email = self.cleaned_data.get('email')
-        if get_user_model().objects.filter(email=email).exists():
-            if self.user is not None and self.user.email != email:
-                raise ValidationError(_('Email is busy'))
-        return email.strip()
+        if email != '':
+            if get_user_model().objects.filter(email=email).exists():
+                if self.user is not None and self.user.email != email:
+                    raise ValidationError(_('Email is busy'))
+            return email.strip()
 
     def clean_phone_number(self):
         phone_number = self.cleaned_data.get('phone_number')
