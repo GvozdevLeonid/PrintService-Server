@@ -25,7 +25,7 @@ function load_print_queue_table(page_number=null) {
         data['page_number'] = page_number;
     }
     fetch(
-        '/dashboard/print-queue-table/',
+        '/print-queue-table/',
         {
             method: 'POST',
             headers: {
@@ -136,7 +136,7 @@ function load_users_table(page_number=null) {
         data['page_number'] = page_number;
     }
     fetch(
-        '/dashboard/users-table/',
+        '/users-table/',
         {
             method: 'POST',
             headers: {
@@ -253,7 +253,7 @@ function load_cashbox_table(page_number=null) {
         data['page_number'] = page_number;
     }
     fetch(
-        '/dashboard/cashbox-table/',
+        '/cashbox-table/',
         {
             method: 'POST',
             headers: {
@@ -385,7 +385,7 @@ function load_prices_table(page_number=null) {
         data['page_number'] = page_number;
     }
     fetch(
-        '/dashboard/prices-table/',
+        '/prices-table/',
         {
             method: 'POST',
             headers: {
@@ -467,7 +467,7 @@ function load_kiosks_table() {
         'search-input': document.getElementById('search-input').value,
     };
     fetch(
-        '/dashboard/kiosks-table/',
+        '/kiosks-table/',
         {
             method: 'POST',
             headers: {
@@ -549,7 +549,7 @@ function load_statistics_page() {
         'date_to': document.getElementById('cashbox-date-to').value
     };
     fetch(
-        '/dashboard/statistics-page/',
+        '/statistics-page/',
         {
             method: 'POST',
             headers: {
