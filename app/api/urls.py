@@ -11,5 +11,4 @@ urlpatterns = [
     path('check-print/<uuid:key>/', views.check_print, name='check-print'),
     path('email-files-list/<uuid:key>/', views.email_files_list, name='email-files-list'),
     path('download-file-from-email/<uuid:key>/', views.download_file_from_email, name='download-file-from-email'),
-
 ]

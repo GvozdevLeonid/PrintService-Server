@@ -11,13 +11,7 @@ class AdminUser(BaseUserAdmin):
     readonly_fields = ["last_login"]
     fieldsets = (
         (('User'), {"fields": ('name', 'phone_number', 'email', 'balance', 'password', 'allow_credit', 'note', 'discount')}),
-        (('Permissions'), {'fields': (
-                                'is_active',
-                                'is_staff',
-                                'is_superuser',
-                                'groups',
-                                )
-                            }),
+        (('Permissions'), {'fields': ('is_active', 'is_staff', 'is_superuser', 'groups',)}),
         (('Last visited'), {'fields': ('last_login',)}),
     )
     add_fieldsets = (
@@ -36,7 +30,7 @@ class AdminUser(BaseUserAdmin):
                 'is_staff',
                 'is_superuser',
                 'groups',
-                ),
+            ),
         }),
     )
 
@@ -64,7 +58,6 @@ class AdminKiosk(admin.ModelAdmin):
 class AdminPrice(admin.ModelAdmin):
     ordering = ['-id']
     list_display = ['kiosk', 'print_settings', 'start_page', 'end_page', 'price']
-
 
 
 admin.site.register(models.User, AdminUser)

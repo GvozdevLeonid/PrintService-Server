@@ -52,7 +52,6 @@ class User(AbstractBaseUser, PermissionsMixin):
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
 
-
     USERNAME_FIELD = 'phone_number'
 
     objects = UserManager()
@@ -125,58 +124,58 @@ class Price(models.Model):
     start_page = models.IntegerField(default=1)
     end_page = models.IntegerField(null=True, blank=True)
     price = models.FloatField(default=0.0)
-    
+
     kiosk = models.ForeignKey('Kiosk', on_delete=models.CASCADE)
     base_price = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True, related_name='same_price')
 
     def __str__(self):
         return f'{self.kiosk} --- {self.print_settings} --- {self.start_page}:{self.end_page}'
-    
+
     @classmethod
     @transaction.atomic
-    def change_range(cls, price_id:int, start_page:int, end_page:int, price:float):
+    def change_range(cls, price_id: int, start_page: int, end_page: int, price: float):
         price_object = cls.objects.get(id=price_id)
-            
+
         base_price = price_object if price_object.base_price is None else price_object.base_price
         same_price_objects = base_price.same_price.all()
 
         if start_page < price_object.start_page:
             previous_price_range = same_price_objects.filter(start_page__gte=start_page, end_page__lte=start_page).first()
             if previous_price_range.start_page != previous_price_range.end_page or previous_price_range.start_page > start_page:
-                previous_price_range.end_page=start_page - 1
+                previous_price_range.end_page = start_page - 1
             else:
                 previous_price_range.delete()
-            
+
             middle_price_range = same_price_objects.filter(start_page__gt=previous_price_range.end_page).order_by('start_page')
             for price_pange in middle_price_range:
                 if price_pange.id != price_object.id:
                     price_pange.delete()
                 else:
                     break
-            
-            price_object.start_page=start_page
-            price_object.price=price
-        
+
+            price_object.start_page = start_page
+            price_object.price = price
+
         elif start_page > price_object.start_page and start_page <= price_object.end_page:
             previous_price_range = same_price_objects.filter(end_page=price_object.start_page - 1).first()
             if previous_price_range is not None:
-                previous_price_range.end_page=start_page - 1
+                previous_price_range.end_page = start_page - 1
                 previous_price_range.save()
             else:
                 cls.objects.create(
-                    print_settings = base_price.print_settings,
-                    start_page = price_object.start_page,
-                    end_page = start_page - 1,
+                    print_settings=base_price.print_settings,
+                    start_page=price_object.start_page,
+                    end_page=start_page - 1,
                     price=price_object.price,
                     base_price=base_price,
                     kiosk=base_price.kiosk
                 )
 
             price_object.start_page = start_page
-            price_object.price=price
-        
+            price_object.price = price
+
         elif end_page is not None and price_object.end_page is None:
-            cls.objects.create (
+            cls.objects.create(
                 print_settings=base_price.print_settings,
                 start_page=price_object.start_page,
                 end_page=end_page,
@@ -186,7 +185,7 @@ class Price(models.Model):
             ).save()
 
             price_object.start_page = end_page + 1
-        
+
         elif end_page is not None and end_page > price_object.end_page:
             next_price_range = same_price_objects.filter(start_page__gte=end_page, end_page__lte=end_page).first()
             if next_price_range is not None:
@@ -201,7 +200,7 @@ class Price(models.Model):
                         price_pange.delete()
                     else:
                         break
-                
+
             else:
                 price_object.end_page = end_page
                 price_object.price = price
@@ -211,12 +210,12 @@ class Price(models.Model):
 
         elif end_page is not None and end_page < price_object.end_page and end_page >= price_object.start_page:
             next_price_range = same_price_objects.filter(start_page=price_object.end_page + 1).first()
-            next_price_range.start_page=end_page - 1
+            next_price_range.start_page = end_page - 1
             next_price_range.save()
 
             price_object.end_page = start_page
-            price_object.price=price
-        
+            price_object.price = price
+
         elif end_page is None and price_object.end_page is not None:
             base_price.start_page = price_object.start_page
             base_price.price = price
@@ -224,7 +223,7 @@ class Price(models.Model):
 
         elif start_page == price_object.start_page and end_page == price_object.end_page:
             price_object.price = price
-        
+
         price_object.save()
 
     @classmethod
@@ -237,15 +236,14 @@ class Price(models.Model):
             next_price_range = same_price_objects.filter(start_page=price_object.end_page + 1).first()
 
             if next_price_range is not None:
-                next_price_range.start_page=price_object.start_page
+                next_price_range.start_page = price_object.start_page
                 next_price_range.save()
 
             else:
                 price_object.base_price.start_page = price_object.start_page
                 price_object.base_price.save()
-            
+
             price_object.delete()
-            
 
 
 class EmailMessage(models.Model):

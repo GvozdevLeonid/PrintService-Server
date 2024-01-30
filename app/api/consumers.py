@@ -1,10 +1,10 @@
-import json
-from app.celery import app
 from channels.generic.websocket import WebsocketConsumer
 from api.functions import (
     check_print_queue,
     check_transactions
 )
+import json
+
 
 class ApiConsumer(WebsocketConsumer):
     tasks = {}
@@ -18,7 +18,7 @@ class ApiConsumer(WebsocketConsumer):
             self.tasks.pop(self.channel_name)
         except KeyError:
             pass
-        
+
     def chat_message(self, text_data):
         self.send(text_data=json.dumps(text_data))
         self.tasks.pop(self.channel_name)
@@ -32,4 +32,3 @@ class ApiConsumer(WebsocketConsumer):
         elif data['action'] == 'check_transactions':
             task = check_transactions.delay(self.channel_name, data['last_id'])
             self.tasks[self.channel_name] = task
-

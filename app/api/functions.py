@@ -1,12 +1,13 @@
-import time
-import json
-from celery import shared_task
 from channels.layers import get_channel_layer
 from asgiref.sync import async_to_sync
 from django.conf import settings
+from celery import shared_task
 import imaplib
 import email
+import time
+import json
 import io
+
 
 def calculate_print_cost(print_settings: str, kiosk_id: int) -> float:
     from core import models
@@ -18,22 +19,23 @@ def calculate_print_cost(print_settings: str, kiosk_id: int) -> float:
         if price_object.end_page is None or price_object.end_page >= print_settings['total_pages']:
             return print_settings['total_pages'] * price_object.price
 
+
 def get_next_guest_identificator() -> str:
     from core import models
+
     def increment_letters(letters):
         reversed_letters = letters[::-1]
         for i, letter in enumerate(reversed_letters):
             if letter < 'Z':
-                new_letters = reversed_letters[:i] + chr(ord(letter) + 1) + reversed_letters[i+1:]
+                new_letters = reversed_letters[:i] + chr(ord(letter) + 1) + reversed_letters[i + 1:]
                 return new_letters[::-1]
         return 'A' * settings.IDENTIFICATOR["letters"]
-    
+
     last_print = models.Print.objects.filter(user__phone_number=settings.GUEST['phone_number']).order_by('-id').first()
     if not last_print:
         return f'{"A" * settings.IDENTIFICATOR["letters"]}{"0" * settings.IDENTIFICATOR["numbers"]}'
     else:
         identificator = last_print.identificator
-    
 
     letters = identificator[:settings.IDENTIFICATOR['letters']]
     numbers = int(identificator[settings.IDENTIFICATOR['letters']:])
@@ -43,7 +45,7 @@ def get_next_guest_identificator() -> str:
     else:
         numbers = 0
         letters = increment_letters(letters)
-    
+
     return letters + str(numbers).zfill(settings.IDENTIFICATOR['numbers'])
 
 
@@ -56,15 +58,15 @@ def check_print_queue(channel_name: str, last_id: int) -> None:
                 break
             else:
                 time.sleep(1)
-    
+
     async_to_sync(get_channel_layer().send)(
-            channel_name,
-            {
-                'type': 'chat_message',
-                'action': 'check_print_queue',
-                'last_id': models.Print.objects.all().last().id
-            }
-        )
+        channel_name,
+        {
+            'type': 'chat_message',
+            'action': 'check_print_queue',
+            'last_id': models.Print.objects.all().last().id
+        }
+    )
 
 
 @shared_task
@@ -78,12 +80,13 @@ def check_transactions(channel_name: str, last_id: int) -> None:
                 time.sleep(1)
 
     async_to_sync(get_channel_layer().send)(
-            channel_name,{
-                'type': 'chat_message',
-                'action': 'check_transactions',
-                'last_id': models.Transaction.objects.all().last().id
-            }
-        )
+        channel_name,
+        {
+            'type': 'chat_message',
+            'action': 'check_transactions',
+            'last_id': models.Transaction.objects.all().last().id
+        }
+    )
 
 
 def parse_configured_printers(configured_printers: dict) -> list[str]:
@@ -98,7 +101,7 @@ def parse_configured_printers(configured_printers: dict) -> list[str]:
                     parse(v, keys + [k])
                 else:
                     price_list.append(' / '.join(keys + [k]))
-    
+
     parse(configured_printers)
 
     return price_list
@@ -124,6 +127,7 @@ def create_print(phone_number, print_settings, kiosk_key) -> dict:
     print_cost = calculate_print_cost(print_settings, kiosk_object.id)
 
     if user_object.phone_number == settings.GUEST['phone_number']:
+
         print_object = models.Print.objects.create(
             print_settings=print_settings,
             identificator=get_next_guest_identificator(),
@@ -131,10 +135,24 @@ def create_print(phone_number, print_settings, kiosk_key) -> dict:
             kiosk=kiosk_object,
             user=user_object
         )
+
+        if user_object.allow_credit:
+            transaction = models.Transaction.objects.create(
+                identificator=print_object.identificator,
+                amount=print_cost,
+                type='guest print',
+                user=user_object,
+                confirming_user=user_object
+            )
+            transaction.save()
+
+            print_object.transaction = transaction
+            print_object.status = 'printed'
+
         print_object.save()
 
-        return {'status': 'ok', 'print': False, 'print_id': print_object.id, 'identificator': print_object.identificator}
-    
+        return {'status': 'ok', 'print': True if user_object.allow_credit else False, 'print_id': print_object.id, 'identificator': print_object.identificator}
+
     elif user_object.balance < print_cost and not user_object.allow_credit:
         print_object = models.Print.objects.create(
             print_settings=print_settings,
@@ -146,7 +164,7 @@ def create_print(phone_number, print_settings, kiosk_key) -> dict:
         print_object.save()
 
         return {'status': 'ok', 'print': False, 'print_id': print_object.id, 'identificator': print_object.identificator}
-    
+
     elif user_object.balance >= print_cost or user_object.allow_credit:
 
         transaction = models.Transaction.objects.create(
@@ -196,6 +214,6 @@ def get_file_from_email(message_id, selected_file_name):
                 filename, encoding = email.header.decode_header(part.get_filename())[0]
                 if encoding is not None:
                     file_name = filename.decode(encoding)
-                
+
                 if selected_file_name == file_name:
                     return io.BytesIO(part.get_payload(decode=True))

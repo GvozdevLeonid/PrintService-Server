@@ -1,8 +1,7 @@
-from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse, FileResponse, Http404
+from django.views.decorators.csrf import csrf_exempt
 from api import functions
 from core import models
-from django.conf import settings
 import json
 import os
 
@@ -20,10 +19,11 @@ def add_kiosk(request, key):
 
                 price_list = functions.parse_configured_printers(json.loads((configured_printers)))
                 functions.create_price_list(price_list, kiosk)
-            
+
             return JsonResponse({'status': 'ok', 'added': True})
-    
+
     return Http404()
+
 
 @csrf_exempt
 def check_user(request, key):
@@ -37,8 +37,8 @@ def check_user(request, key):
                 if user.check_password(password):
                     return JsonResponse({'status': 'ok', 'user': {'phone_number': user.phone_number, 'balance': user.balance, 'email': user.email, 'name': user.name}})
 
-    
     return JsonResponse({'status': 'bad'})
+
 
 @csrf_exempt
 def new_print(request, key):
@@ -50,8 +50,9 @@ def new_print(request, key):
             response = functions.create_print(user_phone_number, print_settings, key)
 
             return JsonResponse(response)
-    
+
     return Http404()
+
 
 @csrf_exempt
 def check_print(request, key):
@@ -61,7 +62,8 @@ def check_print(request, key):
             print_object = models.Print.objects.get(id=print_id)
             return JsonResponse({'status': print_object.status})
     return JsonResponse({'status': 'await'})
-            
+
+
 @csrf_exempt
 def email_files_list(request, key):
     if request.method == 'POST':
@@ -85,10 +87,11 @@ def email_files_list(request, key):
                         for email_message_file_name in email_message_file_names:
                             if email_message_file_name != '':
                                 file_names.append([email_message.message_id, email_message_file_name])
-                            
+
             return JsonResponse({'status': 'ok', 'file_names': file_names.__str__()})
 
     return Http404()
+
 
 @csrf_exempt
 def download_file_from_email(request, key):
@@ -105,6 +108,7 @@ def download_file_from_email(request, key):
         return response
 
     return Http404()
+
 
 @csrf_exempt
 def kiosk_status(request, key):

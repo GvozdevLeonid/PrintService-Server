@@ -1,8 +1,9 @@
 from django import forms
-from django.contrib.auth import  get_user_model, password_validation
+from django.contrib.auth import get_user_model, password_validation
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
 from django.contrib.auth.forms import UsernameField, capfirst
+
 
 class SetPasswordForm(forms.Form):
     """
@@ -75,19 +76,19 @@ class RegistrationForm(forms.Form):
     }
 
     email = forms.EmailField(
-            label=_("Email"),
-            widget=forms.EmailInput(attrs={"autocomplete": "email"}),
-            help_text=_("Enter your email."),
+        label=_("Email"),
+        widget=forms.EmailInput(attrs={"autocomplete": "email"}),
+        help_text=_("Enter your email."),
     )
     phone_number = forms.CharField(
-            label=_("Phone number"),
-            widget=forms.TextInput(attrs={"autocomplete": "phone"}),
-            help_text=_("Enter your phone number."),
+        label=_("Phone number"),
+        widget=forms.TextInput(attrs={"autocomplete": "phone"}),
+        help_text=_("Enter your phone number."),
     )
     name = forms.CharField(
-            label=_("Name"),
-            widget=forms.TextInput(attrs={"autocomplete": "name"}),
-            help_text=_("Enter your first and second name."),
+        label=_("Name"),
+        widget=forms.TextInput(attrs={"autocomplete": "name"}),
+        help_text=_("Enter your first and second name."),
     )
     new_password1 = forms.CharField(
         label=_("Password"),
@@ -106,7 +107,7 @@ class RegistrationForm(forms.Form):
         if email != '':
             if get_user_model().objects.filter(email=email).exists():
                 raise ValidationError(_('Email is busy'))
-            
+
         return email
 
     def clean_phone_number(self):
@@ -140,26 +141,26 @@ class RegistrationForm(forms.Form):
         if commit:
             user.save()
         return user
-    
+
 
 class DashboardUserForm(forms.Form):
     error_messages = {
         "password_mismatch": _("The two password fields didn’t match."),
     }
-        
+
     email = forms.EmailField(
-            label=_("Email"),
-            widget=forms.EmailInput(attrs={"autocomplete": "email"}),
-            required=False
-    )   
+        label=_("Email"),
+        widget=forms.EmailInput(attrs={"autocomplete": "email"}),
+        required=False
+    )
     phone_number = forms.CharField(
-            label=_("Phone number"),
-            widget=forms.TextInput(attrs={"autocomplete": "phone"}),
+        label=_("Phone number"),
+        widget=forms.TextInput(attrs={"autocomplete": "phone"}),
     )
     name = forms.CharField(
-            label=_("Name"),
-            widget=forms.TextInput(attrs={"autocomplete": "name"}),
-            required=False
+        label=_("Name"),
+        widget=forms.TextInput(attrs={"autocomplete": "name"}),
+        required=False
     )
     new_password = forms.CharField(
         label=_("Password"),
@@ -213,7 +214,7 @@ class DashboardUserForm(forms.Form):
         if get_user_model().objects.filter(phone_number=phone_number).exists():
             if self.user is None or self.user.phone_number != phone_number:
                 raise ValidationError(_('Phone number is busy'))
-            
+
         return phone_number
 
     def clean_new_password(self):

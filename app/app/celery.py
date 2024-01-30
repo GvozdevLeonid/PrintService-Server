@@ -1,11 +1,11 @@
 """
 Celery config for app project.
 """
-import os
+from django.conf import settings
 from celery import Celery
 import imaplib
 import email
-from django.conf import settings
+import os
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'app.settings')
 
@@ -32,10 +32,10 @@ def check_new_files():
     if status == 'OK':
         message_ids = message_ids[0].split()
         message_ids = [message_id.decode() for message_id in message_ids]
-    
+
         for message_id in message_ids:
             file_names = []
-            imap.uid('STORE', message_id, '+FLAGS', '(\SEEN)')
+            imap.uid('STORE', message_id, '+FLAGS', '(\SEEN)')  # NOQA W605
             result, message_data = imap.uid('fetch', message_id, '(BODY.PEEK[])')
             raw_email = message_data[0][1].decode('utf-8')
             email_message = email.message_from_string(raw_email)
@@ -53,7 +53,7 @@ def check_new_files():
                     if encoding is not None:
                         file_name = filename.decode(encoding)
                     file_names.append(file_name)
-                    
+
             if len(file_names):
                 models.EmailMessage.objects.create(
                     email=user_email,
