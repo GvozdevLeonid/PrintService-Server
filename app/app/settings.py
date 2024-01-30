@@ -14,13 +14,13 @@ SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'changeme')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = bool(int(os.environ.get('DEBUG', 0)))
 
-ALLOWED_HOSTS = []
-ALLOWED_HOSTS.extend(
-        filter(
-                None,
-                os.environ.get('DJANGO_ALLOWED_HOSTS', '').split(','),
-        )
-)
+ALLOWED_HOSTS = ['*']
+# ALLOWED_HOSTS.extend(
+#         filter(
+#                 None,
+#                 os.environ.get('DJANGO_ALLOWED_HOSTS', '').split(','),
+#         )
+# )
 CSRF_TRUSTED_ORIGINS = []
 CSRF_TRUSTED_ORIGINS.extend(
         filter(
@@ -98,7 +98,7 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 LANGUAGE_CODE = 'he'
-LOGIN_REDIRECT_URL = "/dashboard/print-queue/"
+LOGIN_REDIRECT_URL = "/"
 LANGUAGES = [
     ('en', 'English'),
     ('he', 'Hebrew'),
@@ -149,4 +149,4 @@ TABLE_DATE_FORMAT = '%d/%m/%Y %H:%M'
 ROWS_PER_TABLE = 100
 GUEST = {'phone_number': '00000000', 'password': '00000000'}
 IDENTIFICATOR = {'letters': 2, 'numbers': 4}
-EMAIL = {'host': 'imap.gmail.com', 'port': 993, 'adress': 'print.6274703@gmail.com', 'password': 'zhqdwtakhowutctx'} #os.environ.get('EMAIL_PASSWORD', '')
+EMAIL = {'host': 'imap.gmail.com', 'port': 993, 'adress': 'print.6274703@gmail.com', 'password': 'zhqdwtakhowutctx'}  #os.environ.get('EMAIL_PASSWORD', '')

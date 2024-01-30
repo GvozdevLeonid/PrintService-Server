@@ -1,10 +1,11 @@
-upstream django_app{
+
+upstream django_app {
     server ${APP_HOST}:${APP_PORT};
 }
 
 server {
-    listen 8000;
-    listen [::]:8000;
+    listen 80;
+    listen [::]:80;
 
     location = /favicon.ico { access_log off; log_not_found off; }
 
@@ -17,4 +18,5 @@ server {
         proxy_pass              http://django_app;
         client_max_body_size    200M;
     }
+
 }

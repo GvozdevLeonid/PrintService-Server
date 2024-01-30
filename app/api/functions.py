@@ -54,8 +54,9 @@ def check_print_queue(channel_name: str, last_id: int) -> None:
     from core import models
     if last_id is not None:
         while True:
-            if models.Print.objects.all().last().id > last_id:
-                break
+            if models.Print.objects.all().exists():
+                if models.Print.objects.all().last().id > last_id:
+                    break
             else:
                 time.sleep(1)
 
@@ -64,7 +65,7 @@ def check_print_queue(channel_name: str, last_id: int) -> None:
         {
             'type': 'chat_message',
             'action': 'check_print_queue',
-            'last_id': models.Print.objects.all().last().id
+            'last_id': models.Print.objects.all().last().id if models.Print.objects.all().exists() else -1
         }
     )
 
@@ -74,8 +75,9 @@ def check_transactions(channel_name: str, last_id: int) -> None:
     from core import models
     if last_id is not None:
         while True:
-            if models.Transaction.objects.all().last().id > last_id:
-                break
+            if models.Transaction.objects.all().exists():
+                if models.Transaction.objects.all().last().id > last_id:
+                    break
             else:
                 time.sleep(1)
 
@@ -84,7 +86,7 @@ def check_transactions(channel_name: str, last_id: int) -> None:
         {
             'type': 'chat_message',
             'action': 'check_transactions',
-            'last_id': models.Transaction.objects.all().last().id
+            'last_id': models.Transaction.objects.all().last().id if models.Transaction.objects.all().exists() else -1
         }
     )
 

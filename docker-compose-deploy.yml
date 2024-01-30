@@ -40,7 +40,7 @@ services:
       context: ./proxy
     restart: always
     ports:
-       - '8000:8000'
+       - '9005:80'
     volumes:
       - static-data:/vol/static
       # - ./certbot/www:/var/www/certbot/
