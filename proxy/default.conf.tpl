@@ -3,8 +3,8 @@ upstream django_app{
 }
 
 server {
-    listen 80;
-    listen [::]:80;
+    listen 8000;
+    listen [::]:8000;
 
     location = /favicon.ico { access_log off; log_not_found off; }
 
