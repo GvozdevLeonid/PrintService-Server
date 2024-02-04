@@ -14,19 +14,19 @@ SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'changeme')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = bool(int(os.environ.get('DEBUG', 0)))
 
-ALLOWED_HOSTS = ['*']
-# ALLOWED_HOSTS.extend(
-#         filter(
-#                 None,
-#                 os.environ.get('DJANGO_ALLOWED_HOSTS', '').split(','),
-#         )
-# )
+ALLOWED_HOSTS = []
+ALLOWED_HOSTS.extend(
+    filter(
+        None,
+        os.environ.get('DJANGO_ALLOWED_HOSTS', '').split(','),
+    )
+)
 CSRF_TRUSTED_ORIGINS = []
 CSRF_TRUSTED_ORIGINS.extend(
-        filter(
-                None,
-                os.environ.get('DJANGO_CSRF_TRUSTED_ORIGINS', '').split(','),
-        )
+    filter(
+        None,
+        os.environ.get('DJANGO_CSRF_TRUSTED_ORIGINS', '').split(','),
+    )
 )
 
 
@@ -98,7 +98,7 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 LANGUAGE_CODE = 'he'
-LOGIN_REDIRECT_URL = "/"
+LOGIN_REDIRECT_URL = "print-queue/"
 LANGUAGES = [
     ('en', 'English'),
     ('he', 'Hebrew'),
