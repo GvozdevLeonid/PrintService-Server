@@ -98,7 +98,7 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 LANGUAGE_CODE = 'he'
-LOGIN_REDIRECT_URL = "print-queue/"
+LOGIN_REDIRECT_URL = "/print-queue/"
 LANGUAGES = [
     ('en', 'English'),
     ('he', 'Hebrew'),
