@@ -114,6 +114,7 @@ class Kiosk(models.Model):
         ('disabled', 'disabled')
     ]
     status = models.CharField(max_length=10, choices=status_choices, default='disabled')
+    allow_guest_credit_print = models.BooleanField(default=False)
 
     def __str__(self):
         return self.name

@@ -40,7 +40,7 @@ def get_next_guest_identificator() -> str:
     letters = identificator[:settings.IDENTIFICATOR['letters']]
     numbers = int(identificator[settings.IDENTIFICATOR['letters']:])
 
-    if numbers < (10**settings.IDENTIFICATOR['numbers']) - 1:
+    if numbers < (10 ** settings.IDENTIFICATOR['numbers']) - 1:
         numbers += 1
     else:
         numbers = 0
@@ -138,7 +138,7 @@ def create_print(phone_number, print_settings, kiosk_key) -> dict:
             user=user_object
         )
 
-        if user_object.allow_credit:
+        if kiosk_object.allow_guest_credit_print:
             transaction = models.Transaction.objects.create(
                 identificator=print_object.identificator,
                 amount=print_cost,
@@ -150,6 +150,9 @@ def create_print(phone_number, print_settings, kiosk_key) -> dict:
 
             print_object.transaction = transaction
             print_object.status = 'printed'
+
+            user_object.balance -= print_cost
+            user_object.save()
 
         print_object.save()
 
