@@ -1,8 +1,9 @@
+from django.shortcuts import redirect
 from django.urls import path
 from dashboard import views
 
 urlpatterns = [
-    # path('', views.dashboard, name='dashboard'),
+    path('', lambda request: redirect('print-queue'), name='index'),
 
     path('print-queue/', views.print_queue, name='print-queue'),
     path('print-queue-table/', views.print_queue_table, name='print-queue-table'),
